@@ -18,10 +18,8 @@ const Login = () => {
         password
       });
 
-      // Store token in local storage
       localStorage.setItem('userToken', response.data.token);
 
-      // Navigate to users list page
       navigate('/users');
     } catch (err) {
       setError('Login failed. Please check your credentials.');

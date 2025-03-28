@@ -3,7 +3,6 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { Moon, Sun } from 'lucide-react';
 
-// Edit User Modal Component
 const EditUserModal = ({ user, onClose, onUpdate, isDarkMode }) => {
   const [firstName, setFirstName] = useState(user.first_name);
   const [lastName, setLastName] = useState(user.last_name);
@@ -21,7 +20,6 @@ const EditUserModal = ({ user, onClose, onUpdate, isDarkMode }) => {
         email: email
       });
 
-      // Update local state with new user data
       onUpdate({
         ...user,
         first_name: firstName,
@@ -29,7 +27,6 @@ const EditUserModal = ({ user, onClose, onUpdate, isDarkMode }) => {
         email: email
       });
 
-      // Close modal
       onClose();
     } catch (err) {
       setError('Failed to update user. Please try again.');
@@ -98,7 +95,6 @@ const EditUserModal = ({ user, onClose, onUpdate, isDarkMode }) => {
   );
 };
 
-// Delete Confirmation Modal Component
 const DeleteConfirmationModal = ({ user, onClose, onDelete, isDarkMode }) => {
   const [error, setError] = useState('');
 
@@ -144,7 +140,6 @@ const DeleteConfirmationModal = ({ user, onClose, onDelete, isDarkMode }) => {
   );
 };
 
-// Updated UserList Component with Dark Mode
 const UserList = () => {
   const [users, setUsers] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
@@ -154,20 +149,17 @@ const UserList = () => {
   const [selectedUser, setSelectedUser] = useState(null);
   const [modalType, setModalType] = useState(null);
   const [isDarkMode, setIsDarkMode] = useState(() => {
-    // Check local storage for dark mode preference
     const savedMode = localStorage.getItem('darkMode');
     return savedMode ? JSON.parse(savedMode) : false;
   });
   const navigate = useNavigate();
 
-  // Toggle dark mode
   const toggleDarkMode = () => {
     const newMode = !isDarkMode;
     setIsDarkMode(newMode);
     localStorage.setItem('darkMode', JSON.stringify(newMode));
   };
 
-  // Apply dark mode to html element
   useEffect(() => {
     const htmlElement = document.documentElement;
     if (isDarkMode) {
@@ -177,7 +169,6 @@ const UserList = () => {
     }
   }, [isDarkMode]);
 
-  // Check for authentication token
   useEffect(() => {
     const token = localStorage.getItem('userToken');
     if (!token) {
@@ -185,7 +176,6 @@ const UserList = () => {
     }
   }, [navigate]);
 
-  // Fetch users from API
   useEffect(() => {
     const fetchUsers = async () => {
       setIsLoading(true);
@@ -204,7 +194,6 @@ const UserList = () => {
     fetchUsers();
   }, [currentPage]);
 
-  // Handlers for Edit and Delete
   const handleEditUser = (user) => {
     setSelectedUser(user);
     setModalType('edit');
@@ -230,13 +219,11 @@ const UserList = () => {
     setModalType(null);
   };
 
-  // Logout handler
   const handleLogout = () => {
     localStorage.removeItem('userToken');
     navigate('/login');
   };
 
-  // Pagination handlers
   const handleNextPage = () => {
     if (currentPage < totalPages) {
       setCurrentPage(prevPage => prevPage + 1);
@@ -249,7 +236,6 @@ const UserList = () => {
     }
   };
 
-  // Render loading state
   if (isLoading) {
     return (
       <div className={`min-h-screen flex items-center justify-center ${isDarkMode ? 'bg-gray-900' : 'bg-gray-100'}`}>
@@ -260,7 +246,6 @@ const UserList = () => {
     );
   }
 
-  // Render error state
   if (error) {
     return (
       <div className={`min-h-screen flex items-center justify-center ${isDarkMode ? 'bg-gray-900' : 'bg-gray-100'}`}>
@@ -290,7 +275,7 @@ const UserList = () => {
             </button>
             <button 
               onClick={handleLogout}
-              className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
+              className="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded"
             >
               Logout
             </button>
@@ -317,13 +302,13 @@ const UserList = () => {
               <div className="absolute top-4 right-4 flex space-x-2">
                 <button 
                   onClick={() => handleEditUser(user)}
-                  className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded"
+                  className="bg-blue-400 hover:bg-blue-500 text-white font-bold py-1 px-2 rounded"
                 >
                   Edit
                 </button>
                 <button 
                   onClick={() => handleDeleteUser(user)}
-                  className="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded"
+                  className="bg-red-500 hover:bg-red-600 text-white font-bold py-1 px-2 rounded"
                 >
                   Delete
                 </button>
@@ -339,7 +324,7 @@ const UserList = () => {
             className={`${
               currentPage === 1 
                 ? 'bg-gray-400 cursor-not-allowed' 
-                : 'bg-blue-500 hover:bg-blue-700'
+                : 'bg-blue-400 hover:bg-blue-500'
             } text-white font-bold py-2 px-4 rounded disabled:opacity-50`}
           >
             Previous
@@ -353,7 +338,7 @@ const UserList = () => {
             className={`${
               currentPage === totalPages 
                 ? 'bg-gray-400 cursor-not-allowed' 
-                : 'bg-blue-500 hover:bg-blue-700'
+                : 'bg-blue-400 hover:bg-blue-500'
             } text-white font-bold py-2 px-4 rounded disabled:opacity-50`}
           >
             Next
@@ -361,7 +346,6 @@ const UserList = () => {
         </div>
       </div>
 
-      {/* Modals */}
       {modalType === 'edit' && selectedUser && (
         <EditUserModal 
           user={selectedUser} 
